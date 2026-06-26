@@ -17,7 +17,7 @@ A blockchain-based complaint management platform that enables students to submit
 
 ### Landing Page
 
-<img width="1303" height="617" alt="image" src="https://github.com/user-attachments/assets/56de3e95-3da9-4e07-abdc-dff8c04f0414" />
+![Landing](screenshots/landing.png)
 
 ### Dashboard
 
