@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UniComplaints — Blockchain Complaint System</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="ucms-navbar d-flex align-items-center px-4 gap-3">
+  <span class="navbar-brand me-auto"><i class="bi bi-shield-check me-2"></i>Uni<span>Complaints</span></span>
+  <button id="themeToggle" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="bi bi-moon-fill"></i></button>
+  <button id="walletBtn" class="btn btn-sm btn-primary btn-ucms"><i class="bi bi-wallet2 me-1"></i>Connect Wallet</button>
+</nav>
+
+<!-- ALERT -->
+<div style="position:fixed;top:70px;right:1rem;z-index:9999;width:360px;max-width:95vw">
+  <div id="alertContainer"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="container py-5 position-relative">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="hero-badge"><i class="bi bi-link-45deg"></i>Powered by Ethereum Blockchain</div>
+        <h1 class="hero-title">University Complaints,<br><span>Transparent</span> &amp; Secure</h1>
+        <p class="hero-desc">
+          Submit, track, and vote on university complaints with full on-chain transparency.
+          Every action is immutable, auditable, and fair.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="register.html" class="btn btn-primary btn-ucms btn-lg px-4">
+            <i class="bi bi-plus-circle me-2"></i>File a Complaint
+          </a>
+          <a href="dashboard.html" class="btn btn-outline-light btn-ucms btn-lg px-4">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+          </a>
+        </div>
+        <div class="hero-stats-row">
+          <div class="hero-stat-item"><div class="num" id="heroTotal">—</div><div class="lbl">Complaints</div></div>
+          <div class="hero-stat-item"><div class="num">7</div><div class="lbl">Departments</div></div>
+          <div class="hero-stat-item"><div class="num">100%</div><div class="lbl">On-Chain</div></div>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-block">
+        <div class="hero-visual">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div style="width:10px;height:10px;border-radius:50%;background:#ef4444"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#22c55e"></div>
+            <small class="ms-2 opacity-50">complaint_registry.sol</small>
+          </div>
+          <div style="font-family:monospace;font-size:0.82rem;line-height:1.9;opacity:0.85">
+            <span style="color:#818cf8">function</span> <span style="color:#60a5fa">registerComplaint</span>(<br>
+            &nbsp;&nbsp;<span style="color:#f59e0b">string</span> title,<br>
+            &nbsp;&nbsp;<span style="color:#f59e0b">string</span> department,<br>
+            &nbsp;&nbsp;<span style="color:#f59e0b">uint</span> priority<br>
+            ) <span style="color:#818cf8">external</span> {<br>
+            &nbsp;&nbsp;<span style="color:#4ade80">// stored on-chain forever</span><br>
+            &nbsp;&nbsp;complaints[++count] = ...;<br>
+            &nbsp;&nbsp;<span style="color:#818cf8">emit</span> ComplaintFiled(count);<br>
+            }
+          </div>
+          <hr style="border-color:rgba(255,255,255,0.1);margin:1rem 0">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success">● Live</span>
+            <small class="opacity-60">Sepolia Testnet</small>
+            <span class="ms-auto badge bg-primary">Ethers.js v6</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCKCHAIN SECTION -->
+<section class="py-6" style="padding:5rem 0;background:var(--bg)">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-600 mb-3">Why Blockchain?</span>
+      <h2 class="fw-800 fs-2">Full Transparency Guaranteed</h2>
+      <p class="text-muted">Every complaint is permanently recorded on the Ethereum blockchain — no tampering, no hiding.</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon bg-primary bg-opacity-10 text-primary mx-auto"><i class="bi bi-shield-lock-fill"></i></div>
+          <h5 class="fw-700">Immutable Records</h5>
+          <p class="text-muted small">Once filed, a complaint cannot be altered or deleted — ever.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon bg-success bg-opacity-10 text-success mx-auto"><i class="bi bi-people-fill"></i></div>
+          <h5 class="fw-700">Community Voting</h5>
+          <p class="text-muted small">Students can upvote complaints to signal collective urgency.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon bg-warning bg-opacity-10 text-warning mx-auto"><i class="bi bi-eye-fill"></i></div>
+          <h5 class="fw-700">Public Audit Trail</h5>
+          <p class="text-muted small">Every status change and remark is permanently timestamped.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="py-5" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:5rem 0">
+  <div class="container">
+    <div class="text-center text-white mb-5">
+      <h2 class="fw-800 fs-2">Everything You Need</h2>
+      <p style="color:rgba(255,255,255,0.7)">A complete toolkit for students and administrators.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="feature-card" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:#fff">
+          <div class="feature-icon" style="background:rgba(255,255,255,0.1)"><i class="bi bi-pencil-square text-white"></i></div>
+          <h6 class="fw-700">File Complaints</h6>
+          <p class="small" style="color:rgba(255,255,255,0.6)">Submit detailed complaints with priority and department tagging.</p>
+          <a href="register.html" class="btn btn-sm btn-outline-light btn-ucms mt-1">Get Started</a>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="feature-card" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:#fff">
+          <div class="feature-icon" style="background:rgba(255,255,255,0.1)"><i class="bi bi-search text-white"></i></div>
+          <h6 class="fw-700">Track Progress</h6>
+          <p class="small" style="color:rgba(255,255,255,0.6)">Monitor real-time status with full complaint history.</p>
+          <a href="track.html" class="btn btn-sm btn-outline-light btn-ucms mt-1">Track Now</a>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="feature-card" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:#fff">
+          <div class="feature-icon" style="background:rgba(255,255,255,0.1)"><i class="bi bi-hand-thumbs-up text-white"></i></div>
+          <h6 class="fw-700">Vote & Support</h6>
+          <p class="small" style="color:rgba(255,255,255,0.6)">Amplify important issues by casting your support vote.</p>
+          <a href="vote.html" class="btn btn-sm btn-outline-light btn-ucms mt-1">Vote Now</a>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="feature-card" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:#fff">
+          <div class="feature-icon" style="background:rgba(255,255,255,0.1)"><i class="bi bi-bar-chart-fill text-white"></i></div>
+          <h6 class="fw-700">Analytics</h6>
+          <p class="small" style="color:rgba(255,255,255,0.6)">Visualize complaint trends across departments and priorities.</p>
+          <a href="analytics.html" class="btn btn-sm btn-outline-light btn-ucms mt-1">View Charts</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ucms-footer">
+  <strong>UniComplaints</strong> — Blockchain-Powered Transparency &nbsp;|&nbsp;
+  Developed by: <strong>Malik Usman Ali</strong> &nbsp;|&nbsp;
+  Reg No: <strong>235148</strong>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.umd.min.js"></script>
+<script src="contracts/abi.js"></script>
+<script src="js/contract.js"></script>
+<script src="js/wallet.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const t = document.getElementById("themeToggle");
+  const saved = localStorage.getItem("ucms_theme") || "light";
+  document.documentElement.setAttribute("data-bs-theme", saved);
+  if(t) t.innerHTML = saved==="dark"?'<i class="bi bi-sun-fill"></i>':'<i class="bi bi-moon-fill"></i>';
+  if(t) t.addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-bs-theme");
+    const nxt = cur==="dark"?"light":"dark";
+    document.documentElement.setAttribute("data-bs-theme",nxt);
+    localStorage.setItem("ucms_theme",nxt);
+    t.innerHTML = nxt==="dark"?'<i class="bi bi-sun-fill"></i>':'<i class="bi bi-moon-fill"></i>';
+  });
+  document.getElementById("walletBtn")?.addEventListener("click", connectWallet);
+  await checkWallet();
+  try {
+    const c = await getReadOnlyContract();
+    const total = await c.totalComplaints();
+    document.getElementById("heroTotal").textContent = total.toString();
+  } catch {}
+});
+</script>
+</body>
+</html>

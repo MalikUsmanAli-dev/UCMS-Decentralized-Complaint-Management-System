@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Vote — UniComplaints</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<nav class="ucms-navbar d-flex align-items-center px-3 gap-2">
+  <button id="sidebarToggle" class="btn btn-sm btn-outline-light d-lg-none me-1"><i class="bi bi-list fs-5"></i></button>
+  <span class="navbar-brand me-auto"><i class="bi bi-shield-check me-2"></i>Uni<span>Complaints</span></span>
+  <button id="themeToggle" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="bi bi-moon-fill"></i></button>
+  <button id="walletBtn" class="btn btn-sm btn-primary btn-ucms"><i class="bi bi-wallet2 me-1"></i>Connect Wallet</button>
+</nav>
+<div style="position:fixed;top:70px;right:1rem;z-index:9999;width:360px;max-width:95vw"><div id="alertContainer"></div></div>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<aside class="ucms-sidebar" id="sidebar">
+  <div class="px-3 mb-3 d-flex align-items-center gap-2">
+    <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center"><i class="bi bi-shield-check text-white"></i></div>
+    <div><div class="text-white fw-700 small">UniComplaints</div><div style="color:rgba(255,255,255,0.4);font-size:0.65rem">Blockchain v1.0</div></div>
+  </div>
+  <hr style="border-color:rgba(255,255,255,0.1);margin:0.5rem 1rem 1rem">
+  <div class="sidebar-heading">Student</div>
+  <a href="dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i>Dashboard</a>
+  <a href="register.html"  class="sidebar-link"><i class="bi bi-plus-circle"></i>File Complaint</a>
+  <a href="track.html"     class="sidebar-link"><i class="bi bi-search"></i>Track Complaint</a>
+  <a href="vote.html"      class="sidebar-link"><i class="bi bi-hand-thumbs-up"></i>Vote</a>
+  <a href="reopen.html"    class="sidebar-link"><i class="bi bi-arrow-repeat"></i>Reopen</a>
+  <div class="sidebar-heading mt-3">Admin</div>
+  <a href="admin.html"     class="sidebar-link"><i class="bi bi-gear"></i>Admin Panel</a>
+  <a href="analytics.html" class="sidebar-link"><i class="bi bi-bar-chart-line"></i>Analytics</a>
+  <div class="sidebar-heading mt-3">General</div>
+  <a href="index.html"     class="sidebar-link"><i class="bi bi-house"></i>Home</a>
+</aside>
+<main class="ucms-main">
+  <div class="page-header">
+    <h1><i class="bi bi-hand-thumbs-up me-2 text-primary"></i>Vote on Complaints</h1>
+    <p>Support important issues — each vote is recorded on-chain</p>
+  </div>
+  <div class="d-flex gap-2 mb-4">
+    <button class="btn btn-primary btn-ucms" id="loadVoteBtn"><i class="bi bi-arrow-clockwise me-2"></i>Load Complaints</button>
+  </div>
+  <div id="voteGrid" class="row g-4">
+    <div class="col-12 text-center py-5 text-muted">
+      <i class="bi bi-hand-thumbs-up fs-1 d-block mb-3 opacity-25"></i>
+      Click "Load Complaints" to fetch all complaints from the blockchain.
+    </div>
+  </div>
+</main>
+<footer class="ucms-footer" style="margin-left:var(--sidebar-w)">
+  Developed by: <strong>Usman Ali</strong> &nbsp;|&nbsp; Reg No: <strong>YOUR_REGISTRATION_NUMBER</strong>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.umd.min.js"></script>
+<script src="contracts/abi.js"></script>
+<script src="js/contract.js"></script>
+<script src="js/wallet.js"></script>
+<script src="js/app.js"></script>
+<script>
+async function loadVoteComplaints() {
+  showSpinner("loadVoteBtn","Loading…");
+  document.getElementById("voteGrid").innerHTML = `<div class="col-12 text-center py-4"><span class="spinner-border text-primary me-2"></span>Fetching from blockchain…</div>`;
+  try {
+    const c = await getReadOnlyContract();
+    const total = Number(await c.totalComplaints());
+    if (total === 0) {
+      document.getElementById("voteGrid").innerHTML = `<div class="col-12 text-center py-5 text-muted">No complaints have been filed yet.</div>`;
+      return;
+    }
+    let html = "";
+    for (let i = 1; i <= total; i++) {
+      try {
+        const comp = await c.getComplaint(i);
+        const status  = Number(comp[4]);
+        const priority= Number(comp[5]);
+        const votes   = Number(comp[6]);
+        html += `
+        <div class="col-md-6 col-xl-4">
+          <div class="glass-card complaint-card priority-${PRIORITY_LABELS[priority]?.toLowerCase()||'low'} h-100 d-flex flex-column" style="border-left:none;border-top:4px solid var(--bs-${PRIORITY_COLORS[priority]},#2563eb)">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="badge bg-secondary">#${i}</span>
+              <span class="badge bg-primary"><i class="bi bi-hand-thumbs-up me-1"></i><span id="voteCount_${i}">${votes}</span></span>
+            </div>
+            <h6 class="fw-700 mb-1">${comp[0]}</h6>
+            <div class="text-muted small mb-3">${comp[3]}</div>
+            <div class="d-flex gap-2 mb-3 flex-wrap">
+              <span class="status-badge badge bg-${STATUS_COLORS[status]}">${STATUS_LABELS[status]}</span>
+              <span class="priority-badge badge bg-${PRIORITY_COLORS[priority]}">${PRIORITY_LABELS[priority]}</span>
+            </div>
+            <div class="mt-auto">
+              <button class="btn btn-outline-primary btn-ucms w-100" id="voteBtn_${i}" onclick="castVote(${i})">
+                <i class="bi bi-hand-thumbs-up-fill me-2"></i>Support This Complaint
+              </button>
+            </div>
+          </div>
+        </div>`;
+      } catch {}
+    }
+    document.getElementById("voteGrid").innerHTML = html || `<div class="col-12 text-center py-4 text-muted">No complaints available.</div>`;
+  } catch (err) {
+    showAlert("danger","Failed to load: " + err.message);
+    document.getElementById("voteGrid").innerHTML = `<div class="col-12 text-center py-4 text-danger">${err.message}</div>`;
+  } finally { hideSpinner("loadVoteBtn"); }
+}
+
+async function castVote(id) {
+  const btnId = `voteBtn_${id}`;
+  showSpinner(btnId,"Voting…");
+  try {
+    const c = await initContract();
+    showAlert("info",'<i class="bi bi-hourglass-split me-2"></i>Confirm vote in MetaMask…');
+    const tx = await c.voteComplaint(id);
+    await tx.wait();
+    // update count
+    const nc = await getReadOnlyContract();
+    const newVotes = Number(await nc.getVotes(id));
+    document.getElementById(`voteCount_${id}`).textContent = newVotes;
+    showAlert("success",`<i class="bi bi-check-circle-fill me-2"></i>Vote cast for complaint #${id}!`);
+    document.getElementById(btnId).classList.replace("btn-outline-primary","btn-success");
+    document.getElementById(btnId).innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Voted!';
+    document.getElementById(btnId).disabled = true;
+  } catch (err) {
+    showAlert("danger","Vote failed: " + (err.reason || err.message));
+    hideSpinner(btnId);
+  }
+}
+
+document.getElementById("loadVoteBtn")?.addEventListener("click", loadVoteComplaints);
+</script>
+</body>
+</html>

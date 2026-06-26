@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>File Complaint — UniComplaints</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<nav class="ucms-navbar d-flex align-items-center px-3 gap-2">
+  <button id="sidebarToggle" class="btn btn-sm btn-outline-light d-lg-none me-1"><i class="bi bi-list fs-5"></i></button>
+  <span class="navbar-brand me-auto"><i class="bi bi-shield-check me-2"></i>Uni<span>Complaints</span></span>
+  <button id="themeToggle" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="bi bi-moon-fill"></i></button>
+  <button id="walletBtn" class="btn btn-sm btn-primary btn-ucms"><i class="bi bi-wallet2 me-1"></i>Connect Wallet</button>
+</nav>
+<div style="position:fixed;top:70px;right:1rem;z-index:9999;width:360px;max-width:95vw"><div id="alertContainer"></div></div>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<aside class="ucms-sidebar" id="sidebar">
+  <div class="px-3 mb-3 d-flex align-items-center gap-2">
+    <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center"><i class="bi bi-shield-check text-white"></i></div>
+    <div><div class="text-white fw-700 small">UniComplaints</div><div style="color:rgba(255,255,255,0.4);font-size:0.65rem">Blockchain v1.0</div></div>
+  </div>
+  <hr style="border-color:rgba(255,255,255,0.1);margin:0.5rem 1rem 1rem">
+  <div class="sidebar-heading">Student</div>
+  <a href="dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i>Dashboard</a>
+  <a href="register.html"  class="sidebar-link"><i class="bi bi-plus-circle"></i>File Complaint</a>
+  <a href="track.html"     class="sidebar-link"><i class="bi bi-search"></i>Track Complaint</a>
+  <a href="vote.html"      class="sidebar-link"><i class="bi bi-hand-thumbs-up"></i>Vote</a>
+  <a href="reopen.html"    class="sidebar-link"><i class="bi bi-arrow-repeat"></i>Reopen</a>
+  <div class="sidebar-heading mt-3">Admin</div>
+  <a href="admin.html"     class="sidebar-link"><i class="bi bi-gear"></i>Admin Panel</a>
+  <a href="analytics.html" class="sidebar-link"><i class="bi bi-bar-chart-line"></i>Analytics</a>
+  <div class="sidebar-heading mt-3">General</div>
+  <a href="index.html"     class="sidebar-link"><i class="bi bi-house"></i>Home</a>
+</aside>
+<main class="ucms-main">
+  <div class="page-header">
+    <h1><i class="bi bi-plus-circle me-2 text-primary"></i>File a Complaint</h1>
+    <p>Your complaint is recorded permanently on the blockchain</p>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="glass-card p-4 p-lg-5">
+        <div class="d-flex align-items-center gap-3 mb-4 p-3" style="background:rgba(37,99,235,0.06);border-radius:12px">
+          <i class="bi bi-info-circle-fill text-primary fs-4"></i>
+          <p class="mb-0 small text-muted">Connect your MetaMask wallet before submitting. Your wallet address will be recorded as the complaint owner.</p>
+        </div>
+        <form id="registerForm" class="ucms-form" novalidate>
+          <div class="mb-4">
+            <label for="compTitle">Complaint Title</label>
+            <input type="text" class="form-control" id="compTitle" placeholder="Briefly describe the issue…" required minlength="5" maxlength="100"/>
+            <div class="invalid-feedback">Please enter a title (5–100 characters).</div>
+          </div>
+          <div class="mb-4">
+            <label for="compDesc">Detailed Description</label>
+            <textarea class="form-control" id="compDesc" rows="5" placeholder="Provide full details of the complaint…" required minlength="20"></textarea>
+            <div class="invalid-feedback">Description must be at least 20 characters.</div>
+            <div class="form-text text-end" id="charCount">0 / 500</div>
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+              <label for="compDept">Department</label>
+              <select class="form-select" id="compDept" required>
+                <option value="" disabled selected>Select department…</option>
+                <option>Academic Affairs</option>
+                <option>Examination</option>
+                <option>Hostel</option>
+                <option>Library</option>
+                <option>Transport</option>
+                <option>Laboratory</option>
+                <option>Administration</option>
+              </select>
+              <div class="invalid-feedback">Please select a department.</div>
+            </div>
+            <div class="col-sm-6">
+              <label for="compPriority">Priority</label>
+              <select class="form-select" id="compPriority" required>
+                <option value="" disabled selected>Select priority…</option>
+                <option value="0">🟢 Low</option>
+                <option value="1">🟡 Medium</option>
+                <option value="2">🔴 High</option>
+              </select>
+              <div class="invalid-feedback">Please select priority.</div>
+            </div>
+          </div>
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-ucms w-100 py-3">
+            <i class="bi bi-send-fill me-2"></i>Submit Complaint to Blockchain
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="ucms-footer" style="margin-left:var(--sidebar-w)">
+  Developed by: <strong>Usman Ali</strong> &nbsp;|&nbsp; Reg No: <strong>YOUR_REGISTRATION_NUMBER</strong>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.umd.min.js"></script>
+<script src="contracts/abi.js"></script>
+<script src="js/contract.js"></script>
+<script src="js/wallet.js"></script>
+<script src="js/app.js"></script>
+<script>
+const descArea = document.getElementById("compDesc");
+const charCount = document.getElementById("charCount");
+descArea?.addEventListener("input", () => {
+  charCount.textContent = `${descArea.value.length} / 500`;
+});
+
+document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+  const title    = document.getElementById("compTitle").value.trim();
+  const desc     = document.getElementById("compDesc").value.trim();
+  const dept     = document.getElementById("compDept").value;
+  const priority = parseInt(document.getElementById("compPriority").value);
+  showSpinner("submitBtn", "Waiting for MetaMask…");
+  try {
+    const c = await initContract();
+    showAlert("info", '<i class="bi bi-hourglass-split me-2"></i>Confirm transaction in MetaMask…');
+    const tx = await c.registerComplaint(title, desc, dept, priority);
+    showAlert("info", `<i class="bi bi-hourglass-split me-2"></i>Transaction pending… <a href="https://sepolia.etherscan.io/tx/${tx.hash}" target="_blank">View on Etherscan</a>`);
+    showSpinner("submitBtn", "Confirming on blockchain…");
+    await tx.wait();
+    showAlert("success", '<i class="bi bi-check-circle-fill me-2"></i>Complaint filed successfully! Check your dashboard.');
+    form.reset(); form.classList.remove("was-validated");
+    charCount.textContent = "0 / 500";
+  } catch (err) {
+    showAlert("danger", '<i class="bi bi-x-circle-fill me-2"></i>Error: ' + (err.reason || err.message));
+  } finally { hideSpinner("submitBtn"); }
+});
+</script>
+</body>
+</html>
