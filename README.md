@@ -82,9 +82,9 @@ UniComplaints/
 
 ## Deployment
 
-Live Demo: [Add Netlify URL]
+Live Demo: https://unicomplaints.netlify.app/
 
-Contract Address: [Add Sepolia Contract Address]
+Contract Address: 0xb6B3EcB59034dd55afD4e9564A55BDe8F1e7a116
 
 ## Key Learning Outcomes
 
